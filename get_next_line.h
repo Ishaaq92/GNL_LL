@@ -18,10 +18,16 @@ struct node
 };
 
 
-int	ft_strchri(const char *s, int c, int start);
+int	    ft_strchri(const char *s, int c, int start);
 char	*ft_strdup(const char *s);
 size_t	ft_strlen(const char *s);
+char	*ft_substr(char const *s, unsigned int start, size_t len);
+char	*ft_strjoin(char const *s1, char const *s2);
+char	*ft_truncate(char *s, unsigned int start);
 // char	*ft_substr(char const *s, unsigned int start, size_t len);
 // char	*subnstr(char *text, unsigned int len);
 // size_t	ft_strlen(const char *s);
-// char	*get_next_line(in
+// char	*get_next_line(int fd);
+// char	*ft_truncate(char *s, unsigned int start);
+
+#endif
