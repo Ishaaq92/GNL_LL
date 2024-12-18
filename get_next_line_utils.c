@@ -1,29 +1,42 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line_utils.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/18 17:07:32 by isahmed           #+#    #+#             */
+/*   Updated: 2024/12/18 17:45:33 by isahmed          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "get_next_line.h"
 
-void	print_ll(struct node *start)
-{
-	struct node	*current;
-	int			i;
+// void	print_ll(struct s_node *start)
+// {
+// 	struct s_node	*current;
+// 	int				i;
 
-	i = 0;
-	current = start;
-	while (current != NULL)
-	{
-		printf("%d: %s\n", i, current->text);
-		current = current->next;
-		i ++;
-	}
-}
-void	append_node(struct node **lst, char *buffer)
-{
-    struct node *new_node;
-	struct node *current;
+// 	i = 0;
+// 	current = start;
+// 	while (current != NULL)
+// 	{
+// 		printf("%d: %s\n", i, current->text);
+// 		current = current->next;
+// 		i ++;
+// 	}
+// }
 
-    new_node = (struct node *)malloc(sizeof(struct node));
-    if (!new_node) 
-        return;
-    new_node->text = buffer; 
-    new_node->next = NULL; 
+void	append_node(struct s_node **lst, char *buffer)
+{
+	struct s_node	*new_node;
+	struct s_node	*current;
+
+	new_node = (struct s_node *)malloc(sizeof(struct s_node));
+	if (!new_node)
+		return ;
+	new_node->text = buffer;
+	new_node->next = NULL;
 	if (!*lst)
 	{
 		*lst = new_node;
@@ -35,62 +48,61 @@ void	append_node(struct node **lst, char *buffer)
 	current->next = new_node;
 }
 
-int	check_for_nl(struct node **lst)
+int	check_for_nl(struct s_node **lst)
 {
-    struct node *current;
-    int         length;
-    int         i;
+	struct s_node	*current;
+	int				length;
+	int				i;
 
-    if (lst == NULL || *lst == NULL) // Ensure the list is not NULL
-        return (-1);
-    length = 0;
-    current = *lst;
-    while (current != NULL && current->text != NULL)
-    {
-        i = 0;
-        while (current->text[i] != '\0')
-        {
-            length++;
-            if (current->text[i] == '\n') // Stop if a newline is found
-                return (length);
-            i++;
-        }
-        current = current->next; // Move to the next node
-    }
-    return (-1);
+	if (lst == NULL || *lst == NULL)
+		return (-1);
+	length = 0;
+	current = *lst;
+	while (current != NULL && current->text != NULL)
+	{
+		i = 0;
+		while (current->text[i] != '\0')
+		{
+			length++;
+			if (current->text[i] == '\n')
+				return (length);
+			i++;
+		}
+		current = current->next;
+	}
+	return (-1);
 }
-int	check_for_no_nl(struct node **lst)
+
+int	check_for_no_nl(struct s_node **lst)
 {
-	struct node *current;
-    int         length;
-    int         i;
+	struct s_node	*current;
+	int				length;
+	int				i;
 
-    if (lst == NULL || *lst == NULL) // Ensure the list is not NULL
-        return (0);
-    length = 0;
-    current = *lst;
-    while (current != NULL)
-    {
-        i = 0;
-        while (current->text[i] != '\0')
-        {
-            length++;
-            i++;
-        }
-        current = current->next; // Move to the next node
-    }
-    return (length);
+	if (lst == NULL || *lst == NULL)
+		return (0);
+	length = 0;
+	current = *lst;
+	while (current != NULL)
+	{
+		i = 0;
+		while (current->text[i] != '\0')
+		{
+			length++;
+			i++;
+		}
+		current = current->next;
+	}
+	return (length);
 }
-int	create_ll(int fd, struct node **lst)
+
+int	create_ll(int fd, struct s_node **lst)
 {
 	ssize_t		num_read;
-    char     	*buffer;
+	char		*buffer;
 	int			line_len;
 	int			nl_pos;
 
-	nl_pos = check_for_nl(lst);
-	if (nl_pos >= 0) // Check if there is already a line to return.
-		return nl_pos;
 	line_len = check_for_no_nl(lst);
 	while (1)
 	{
@@ -101,44 +113,37 @@ int	create_ll(int fd, struct node **lst)
 		if (num_read <= 0)
 		{
 			free(buffer);
-			return (line_len);	
+			return (line_len);
 		}
 		buffer[num_read] = '\0';
 		append_node(lst, buffer);
 		nl_pos = ft_strchri(buffer, '\n', 0);
-		if (nl_pos >= 0) // if it does contain '\n'
-		{
-			line_len += (nl_pos + 1); // Instead of adding num_read bytes add index of '\n' in the buffer.
-			return (line_len);
-		}
+		if (nl_pos >= 0)
+			return (line_len + (nl_pos + 1));
 		line_len += (int)num_read;
 	}
 }
-void	clean_ll(struct node **lst)
+
+void	clean_ll(struct s_node **lst, struct s_node *current, int i)
 {
-	struct node *current;
-	struct node	*temp;
-	int			nl_pos;
-	int			i;
-	
-	current = *lst;
+	struct s_node	*temp;
+	int				nl_pos;
+
 	while (current != NULL)
 	{
 		nl_pos = ft_strchri(current->text, '\n', 0);
 		if (nl_pos >= 0)
-			break;
+			break ;
 		temp = current->next;
 		free(current->text);
 		free(current);
 		current = temp;
 	}
-	if (nl_pos == -1)
+	if (nl_pos++ == -1)
 	{
 		*lst = current;
-		return;
+		return ;
 	}
-	i = 0; 
-	nl_pos ++; // Don't include new line
 	while (current->text[nl_pos + i] != '\0')
 	{
 		current->text[i] = current->text[nl_pos + i];
@@ -147,17 +152,17 @@ void	clean_ll(struct node **lst)
 	current->text[i] = '\0';
 	*lst = current;
 }
-char	*get_line(struct node **lst, int line_len)
+
+char	*get_line(struct s_node **lst, int line_len)
 {
-	struct node *current;
-	char		*line;
-	int			i;
-	int			j;
+	struct s_node	*current;
+	char			*line;
+	int				i;
+	int				j;
 
 	i = 0;
 	current = *lst;
 	line = malloc(sizeof(char) * (line_len + 1));
-	// if (line_len == 1 && current)
 	while (current != NULL)
 	{
 		j = 0;
@@ -169,9 +174,10 @@ char	*get_line(struct node **lst, int line_len)
 			line[i] = '\n';
 		current = current->next;
 	}
-	line[line_len] = '\0'; // ENSURE LINE_LEN IS THE ACTUAL LENGTH OF THE LINE
+	line[line_len] = '\0';
 	return (line);
 }
+
 int	ft_strchri(const char *s, int c, int start)
 {
 	int		i;
@@ -187,3 +193,5 @@ int	ft_strchri(const char *s, int c, int start)
 		return (-1);
 	return (-1);
 }
+
+// ft_strchi() can be removed if code is replaced in the two locations.

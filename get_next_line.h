@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/18 17:17:39 by isahmed           #+#    #+#             */
+/*   Updated: 2024/12/18 17:46:59 by isahmed          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
 
@@ -11,21 +23,19 @@
 # include <unistd.h>
 # include <fcntl.h> 
 
-struct node
+struct s_node
 {
-    char *text;
-    struct node *next;
+	char			*text;
+	struct s_node	*next;
 };
 
-int	    ft_strchri(const char *s, int c, int start);
+int		ft_strchri(const char *s, int c, int start);
 char	*get_next_line(int fd);
-void	print_ll(struct node *start);
-void	append_node(struct node **lst, char *buffer);
-int	    check_for_nl(struct node **lst);
-int	    check_for_no_nl(struct node **lst);
-int	    create_ll(int fd, struct node **lst);
-void	clean_ll(struct node **lst);
-char	*get_line(struct node **lst, int line_len);
-
-
+void	print_ll(struct s_node *start);
+void	append_node(struct s_node **lst, char *buffer);
+int		check_for_nl(struct s_node **lst);
+int		check_for_no_nl(struct s_node **lst);
+int		create_ll(int fd, struct s_node **lst);
+void	clean_ll(struct s_node **lst, struct s_node *current, int i);
+char	*get_line(struct s_node **lst, int line_len);
 #endif

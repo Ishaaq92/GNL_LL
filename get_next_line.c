@@ -6,7 +6,7 @@
 /*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 11:23:46 by isahmed           #+#    #+#             */
-/*   Updated: 2024/12/18 16:58:36 by isahmed          ###   ########.fr       */
+/*   Updated: 2024/12/18 17:47:35 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,23 +14,24 @@
 
 char	*get_next_line(int fd)
 {
-    static struct node		*start;
+	static struct s_node	*start;
 	char					*line;
 	int						line_len;
 
 	if (fd < 0 || BUFFER_SIZE < 1)
 		return (NULL);
-	line_len = create_ll(fd, &start);
+	line_len = check_for_nl(&start);
+	if (line_len < 0)
+		line_len = create_ll(fd, &start);
 	if (!start || line_len == -1)
-		return(NULL);
+		return (NULL);
 	line = get_line(&start, line_len);
-	// printf("%s", line);
 	if (line[0] == '\0')
 	{
 		free(line);
 		return (NULL);
 	}
-	clean_ll(&start);
+	clean_ll(&start, start, 0);
 	return (line);
 }
 // int main(int ac, char *av[])
