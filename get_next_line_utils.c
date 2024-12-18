@@ -3,12 +3,15 @@
 void	print_ll(struct node *start)
 {
 	struct node	*current;
+	int			i;
 
+	i = 0;
 	current = start;
 	while (current != NULL)
 	{
-		printf("%s", current->text);
+		printf("%d: %s\n", i, current->text);
 		current = current->next;
+		i ++;
 	}
 }
 void	append_node(struct node **lst, char *buffer)
@@ -42,7 +45,7 @@ int	check_for_nl(struct node **lst)
         return (-1);
     length = 0;
     current = *lst;
-    while (current != NULL)
+    while (current != NULL && current->text != NULL)
     {
         i = 0;
         while (current->text[i] != '\0')
@@ -119,7 +122,6 @@ void	clean_ll(struct node **lst)
 	int			i;
 	
 	current = *lst;
-	//print_ll(current);
 	while (current != NULL)
 	{
 		nl_pos = ft_strchri(current->text, '\n', 0);
@@ -131,7 +133,10 @@ void	clean_ll(struct node **lst)
 		current = temp;
 	}
 	if (nl_pos == -1)
+	{
+		*lst = current;
 		return;
+	}
 	i = 0; 
 	nl_pos ++; // Don't include new line
 	while (current->text[nl_pos + i] != '\0')
@@ -141,7 +146,6 @@ void	clean_ll(struct node **lst)
 	}
 	current->text[i] = '\0';
 	*lst = current;
-	//print_ll(*lst);
 }
 char	*get_line(struct node **lst, int line_len)
 {
@@ -153,6 +157,7 @@ char	*get_line(struct node **lst, int line_len)
 	i = 0;
 	current = *lst;
 	line = malloc(sizeof(char) * (line_len + 1));
+	// if (line_len == 1 && current)
 	while (current != NULL)
 	{
 		j = 0;
