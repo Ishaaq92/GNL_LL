@@ -6,7 +6,7 @@
 /*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 11:23:46 by isahmed           #+#    #+#             */
-/*   Updated: 2024/12/18 17:47:35 by isahmed          ###   ########.fr       */
+/*   Updated: 2024/12/18 19:09:26 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,6 @@ char	*get_next_line(int fd)
 	if (!start || line_len == -1)
 		return (NULL);
 	line = get_line(&start, line_len);
-	if (line[0] == '\0')
-	{
-		free(line);
-		return (NULL);
-	}
 	clean_ll(&start, start, 0);
 	return (line);
 }

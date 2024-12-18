@@ -6,7 +6,7 @@
 /*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 17:07:32 by isahmed           #+#    #+#             */
-/*   Updated: 2024/12/18 17:45:33 by isahmed          ###   ########.fr       */
+/*   Updated: 2024/12/18 19:09:24 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,11 +86,8 @@ int	check_for_no_nl(struct s_node **lst)
 	while (current != NULL)
 	{
 		i = 0;
-		while (current->text[i] != '\0')
-		{
+		while (current->text[i++] != '\0')
 			length++;
-			i++;
-		}
 		current = current->next;
 	}
 	return (length);
@@ -139,11 +136,9 @@ void	clean_ll(struct s_node **lst, struct s_node *current, int i)
 		free(current);
 		current = temp;
 	}
+	*lst = current;
 	if (nl_pos++ == -1)
-	{
-		*lst = current;
 		return ;
-	}
 	while (current->text[nl_pos + i] != '\0')
 	{
 		current->text[i] = current->text[nl_pos + i];
@@ -162,14 +157,14 @@ char	*get_line(struct s_node **lst, int line_len)
 
 	i = 0;
 	current = *lst;
+	if (line_len == 0)
+		return (NULL);
 	line = malloc(sizeof(char) * (line_len + 1));
 	while (current != NULL)
 	{
 		j = 0;
 		while (current->text[j] != '\n' && current->text[j] != '\0')
-		{
 			line[i ++] = current->text[j ++];
-		}
 		if (current->text[j] == '\n')
 			line[i] = '\n';
 		current = current->next;
