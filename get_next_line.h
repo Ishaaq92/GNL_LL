@@ -17,17 +17,13 @@ struct node
     struct node *next;
 };
 
-
+void	append_node(struct node **lst, char *buffer);
+int	    check_for_nl(struct node **lst);
+int	    check_for_no_nl(struct node **lst);
+int	    create_ll(int fd, struct node **lst);
+void	clean_ll(struct node **lst);
+char	*get_line(struct node **lst, int line_len);
 int	    ft_strchri(const char *s, int c, int start);
-char	*ft_strdup(const char *s);
-size_t	ft_strlen(const char *s);
-char	*ft_substr(char const *s, unsigned int start, size_t len);
-char	*ft_strjoin(char const *s1, char const *s2);
-char	*ft_truncate(char *s, unsigned int start);
-// char	*ft_substr(char const *s, unsigned int start, size_t len);
-// char	*subnstr(char *text, unsigned int len);
-// size_t	ft_strlen(const char *s);
-// char	*get_next_line(int fd);
-// char	*ft_truncate(char *s, unsigned int start);
-
+char	*get_next_line(int fd);
+void	print_ll(struct node *start);
 #endif
