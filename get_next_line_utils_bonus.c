@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line_utils.c                              :+:      :+:    :+:   */
+/*   get_next_line_utils_bonus.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/19 12:08:26 by isahmed           #+#    #+#             */
-/*   Updated: 2024/12/19 12:34:34 by isahmed          ###   ########.fr       */
+/*   Created: 2024/12/18 17:07:32 by isahmed           #+#    #+#             */
+/*   Updated: 2024/12/19 12:34:33 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 void	append_node(struct s_node **lst, char *buffer)
 {

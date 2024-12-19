@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/17 11:23:46 by isahmed           #+#    #+#             */
-/*   Updated: 2024/12/19 12:34:35 by isahmed          ###   ########.fr       */
+/*   Created: 2024/12/19 12:06:37 by isahmed           #+#    #+#             */
+/*   Updated: 2024/12/19 12:34:30 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 int	create_ll(int fd, struct s_node **lst)
 {
@@ -69,19 +69,19 @@ void	clean_ll(struct s_node **lst, struct s_node *current, int i)
 
 char	*get_next_line(int fd)
 {
-	static struct s_node	*start;
 	char					*line;
 	int						line_len;
+	static struct s_node	*starts[FOPEN_MAX];
 
-	if (fd < 0 || BUFFER_SIZE < 1)
+	if (fd < 0 || BUFFER_SIZE < 1 || fd >= FOPEN_MAX)
 		return (NULL);
-	line_len = check_for_nl(&start);
+	line_len = check_for_nl(&starts[fd]);
 	if (line_len < 0)
-		line_len = create_ll(fd, &start);
-	if (!start || line_len == -1)
+		line_len = create_ll(fd, &starts[fd]);
+	if (!starts[fd] || line_len == -1)
 		return (NULL);
-	line = get_line(&start, line_len);
-	clean_ll(&start, start, 0);
+	line = get_line(&starts[fd], line_len);
+	clean_ll(&starts[fd], starts[fd], 0);
 	return (line);
 }
 // int main(int ac, char *av[])
