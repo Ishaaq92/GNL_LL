@@ -6,11 +6,66 @@
 /*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 11:23:46 by isahmed           #+#    #+#             */
-/*   Updated: 2024/12/18 19:09:26 by isahmed          ###   ########.fr       */
+/*   Updated: 2024/12/19 11:59:25 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+
+int	create_ll(int fd, struct s_node **lst)
+{
+	ssize_t		num_read;
+	char		*buffer;
+	int			line_len;
+	int			nl_pos;
+
+	line_len = check_for_no_nl(lst);
+	while (1)
+	{
+		buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1));
+		if (!buffer)
+			return (-1);
+		num_read = read(fd, buffer, BUFFER_SIZE);
+		if (num_read <= 0)
+		{
+			free(buffer);
+			return (line_len);
+		}
+		buffer[num_read] = '\0';
+		append_node(lst, buffer);
+		nl_pos = ft_strchri(buffer, '\n', 0);
+		if (nl_pos >= 0)
+			return (line_len + (nl_pos + 1));
+		line_len += (int)num_read;
+	}
+}
+
+void	clean_ll(struct s_node **lst, struct s_node *current, int i)
+{
+	struct s_node	*temp;
+	int				nl_pos;
+
+	while (current != NULL)
+	{
+		nl_pos = ft_strchri(current->text, '\n', 0);
+		if (nl_pos >= 0)
+			break ;
+		temp = current->next;
+		free(current->text);
+		free(current);
+		current = temp;
+	}
+	*lst = current;
+	if (nl_pos++ == -1)
+		return ;
+	while (current->text[nl_pos + i] != '\0')
+	{
+		current->text[i] = current->text[nl_pos + i];
+		i ++;
+	}
+	current->text[i] = '\0';
+	*lst = current;
+}
 
 char	*get_next_line(int fd)
 {
